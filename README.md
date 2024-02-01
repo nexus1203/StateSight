@@ -13,7 +13,7 @@ StateSight is a Python package that brings transparency to your Python class sta
 Clone the repository from GitHub to start using StateSight in your project:
 
 ```bash
-git clone https://github.com/yourusername/StateSight.git
+git clone https://github.com/nexus1203/StateSight.git
 ```
 
 ## Quick Start
