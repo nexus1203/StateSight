@@ -120,8 +120,7 @@ def state_sight(buffer_size: int = 100,
 
                 if len(self._log) > self._buffer_size:
                     self._log.pop(0)
-                    print("Buffer full, removing oldest entry")
-
+                  
                 if self._log_file:
                     self._write_log_to_file()
 
