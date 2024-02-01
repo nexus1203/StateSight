@@ -4,7 +4,7 @@ import datetime
 
 if __name__ == "__main__":
     # Example Usage
-    @state_sight(buffer_size=5,
+    @state_sight(buffer_size=10,
                  log_file='log.json',
                  log_lists=True,
                  log_dicts=True,
@@ -20,7 +20,6 @@ if __name__ == "__main__":
             self.some_thing = datetime.datetime.now()
 
     def say_hello():
-        print("Hello")
         return "Hello"
 
     # Testing the logging
