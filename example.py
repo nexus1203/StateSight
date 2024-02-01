@@ -36,14 +36,3 @@ if __name__ == "__main__":
 
     print(obj.to_json())  # Serializes current state to JSON
     print(obj.get_log())  # Retrieves the log of all changes
-
-    @state_sight(buffer_size=5,
-                 log_file='logx.json',
-                 log_lists=True,
-                 log_dicts=True,
-                 log_numpy_arrays=True)
-    def say_hello(x=10, y=30):
-        overall = x + y
-        return overall
-
-    print(say_hello(10, 20))
