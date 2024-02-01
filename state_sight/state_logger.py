@@ -68,10 +68,16 @@ def state_sight(buffer_size: int = 100,
                 self._buffer_size = buffer_size
                 self._log_file = log_file
                 super().__init__(*args, **kwargs)
+                # reset the log after initialization
+                self._log = []
                 self._log_state("Initial State")
 
             def __setattr__(self, name, value):
-                prev_value = getattr(self, name, None)
+                try:
+                    prev_value = self._log[-1]['State'][
+                        name] if self._log else None
+                except:
+                    prev_value = self.__dict__.get(name, None)
                 object.__setattr__(self, name, value)
 
                 if name not in self._internal_attributes:
@@ -109,11 +115,12 @@ def state_sight(buffer_size: int = 100,
                     'Change': change_msg,
                     'State': state_snapshot
                 }
-
+                # print(log_entry)
                 self._log.append(log_entry)
 
                 if len(self._log) > self._buffer_size:
                     self._log.pop(0)
+                    print("Buffer full, removing oldest entry")
 
                 if self._log_file:
                     self._write_log_to_file()
@@ -150,10 +157,6 @@ def state_sight(buffer_size: int = 100,
                             # as string
                             json_entry = json_entry[1:
                                                     -1]  # remove curly braces
-                            # insert :: after "Timestamp": "2024-02-01T15:42:44.382751" using regex
-                            # import regex as re
-                            # json_entry = re.sub(r'("Timestamp": ".*?")',
-                            #                     r'\1::', json_entry)
                             file.write(json_entry + '\n')
 
             def _default_serializer(self, obj):
@@ -183,10 +186,10 @@ def state_sight(buffer_size: int = 100,
 
 if __name__ == "__main__":
     # Example Usage
-    @state_sight(buffer_size=5,
+    @state_sight(buffer_size=50,
                  log_file='log.json',
                  log_lists=False,
-                 log_dicts=False,
+                 log_dicts=True,
                  log_numpy_arrays=False)
     class MyClass:
 
@@ -199,12 +202,13 @@ if __name__ == "__main__":
             self.some_thing = datetime.datetime.now()
 
     def say_hello():
-        print("Hello")
         return "Hello"
 
     # Testing the logging
     obj = MyClass(10, 'Hello')
-    obj.x = 20
+    obj.dict_example['keyx'] = 'new_value'
+    obj.x = 200
+    obj.array = np.array([4, 5, 6])
     obj.y = 'World'
     obj.array = np.array([4, 5, 6])
     obj.dict_example = {"new_key": "new_value"}
